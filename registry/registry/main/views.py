@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from .forms import DocumentForm
 from .models import Documents
 from django.db.models import Q
-# from django.db.models.functions import Lower
 
 
 def index(request):
@@ -18,20 +17,6 @@ def search(request):
         query = ''
     documents = Documents.objects.filter(Q(title__icontains=query) | Q(doc_author__icontains=query) |
                                          Q(approval_date__icontains=query) | Q(note__icontains=query))
-    return render(request, 'main/search_results.html', {'title': 'Результат поиска', 'documents': documents})
-
-
-def filters(request):
-    title = request.GET.get('title')
-    author = request.GET.get('author')
-    date = request.GET.get('date')
-    note = request.GET.get('note')
-
-    documents = Documents.objects.filter(Q(title__icontains=title) or
-                                         Q(doc_author__icontains=author) or
-                                         Q(approval_date__icontains=date) or
-                                         Q(note__icontains=note)
-                                         )
     return render(request, 'main/search_results.html', {'title': 'Результат поиска', 'documents': documents})
 
 

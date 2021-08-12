@@ -5,25 +5,96 @@
 {% endblock %}
 {% block content %}
 
-<div xmlns="http://www.w3.org/1999/html">
-        <h1>Список документов</h1>
-</div>
-    <div class="row">
-        <div class="col-md-4"><th><h5><a href="?order_by=title" style="color: black">Документ</a></h5></th></div>
-        <div class="col-md-2"><th><h5><a href="?order_by=doc_author" style="color: black">Автор</a></h5></th></div>
-        <div class="col-md-2"><th><h5><a href="?order_by=approval_date" style="color: black">Дата утверждения</a></h5></th></div>
-        <div class="col-md-2"><th><h5><a href="?order_by=note" style="color: black">Описание</a></h5></th></div>
-    </div>
-    {% if documents %}
-        {% for el in documents %}
-            <div class="row">
-                <div class="col-md-4"><h5><a href={{ el.doc_url }} style="color: gray">{{ el.title }}</a></h5></div>
-                <div class="col-md-2">{{ el.doc_author }}</div>
-                <div class="col-md-2">{{ el.approval_date }}</div>
-                <div class="col-md-2">{{ el.note }}</div>
+<div class="container">
+        <div class="row g-3">
+            <div class="container">
+                <div class="row justify-content-center" style="color: grey">
+                    <form class="form-inline"  method="get">
+                        <span class="icon"><i class="fa fa-search"></i></span>
+                        <div class="col">
+                            <input name="q" type="text" class="form-control" placeholder= "Что ищем?">
+                        </div>
+                        <div class="col">
+                            <input name="date_start" type="date" class="form-control" id=now>
+                            <script>
+                            document.getElementById('now').value = new Date().toISOString().substring(0, 10);
+                            </script>
+                        </div>
+                        <div class="col">
+                            <input name="date_end" type="date" class="form-control" id=end>
+                            <script>
+                            document.getElementById('end').value = new Date().toISOString().substring(0, 10);
+                            </script>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn-sm btn btn-outline-success">Применить</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        {% endfor %}
-    {% else %}
-        <p>У нас нет записей!</p>
-    {% endif %}
+        </div>
+</div>
+{% if documents %}
+<table class="table table-hover">
+  <thead>
+    <tr>
+        <th scope="col"><h5><a style="color: black">Документ</a>
+            <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=title">
+                &#9650;
+            </a>
+            <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-title">
+                &#9660;
+            </a>
+        </h5>
+        </th>
+        <th scope="col"><h5><a style="color: black">Автор</a>
+            <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=doc_author">
+                &#9650;
+            </a>
+            <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-doc_author">
+                &#9660;
+            </a>
+        </h5>
+        </th>
+        <th scope="col"><h5><a style="color: black">Дата утверждения</a>
+            <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=approval_date">
+                &#9650;
+            </a>
+            <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-approval_date">
+                &#9660;
+            </a>
+        </h5>
+        </th>
+        <th scope="col"><h5><a style="color: black">Описание</a>
+            <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=note">
+                &#9650;
+            </a>
+            <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-note">
+                &#9660;
+            </a>
+
+        </h5>
+        </th>
+    </tr>
+  </thead>
+        {% for el in documents %}
+  <tbody>
+    <tr>
+      <th scope="row"><h5><a target="_blank" href={{ el.doc_url }} style="color: gray">{{ el.title }}</a></h5></th>
+      <td>{{ el.doc_author }}</td>
+      <td>{{ el.approval_date }}</td>
+      <td>{{ el.note }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+        <a class="container">
+            <div class="container">
+                <div class="row justify-content-center" style="color: black">
+                    <h5 style="color: gray">У нас нет записей, удовлетворяющих условиям поиска!</h5>
+                </div>
+            </div>
+        </a>
+{% endif %}
 {% endblock %}

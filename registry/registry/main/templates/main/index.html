@@ -3,27 +3,159 @@
 {% block title %}
 {{ title }}
 {% endblock %}
-
 {% block content %}
-<div xmlns="http://www.w3.org/1999/html">
-        <h1>Список документов</h1>
-</div>
-    <div class="row">
-        <div class="col-md-4"><th><h5><a href="?order_by=title" style="color: black">Документ</a></h5></th></div>
-        <div class="col-md-2"><th><h5><a href="?order_by=doc_author" style="color: black">Автор</a></h5></th></div>
-        <div class="col-md-2"><th><h5><a href="?order_by=approval_date" style="color: black">Дата утверждения</a></h5></th></div>
-        <div class="col-md-2"><th><h5><a href="?order_by=note" style="color: black">Описание</a></h5></th></div>
-    </div>
-    {% if documents %}
-        {% for el in documents %}
-            <div class="row">
-                <div class="col-md-4"><h5><a href={{ el.doc_url }} style="color: gray">{{ el.title }}</a></h5></div>
-                <div class="col-md-2">{{ el.doc_author }}</div>
-                <div class="col-md-2">{{ el.approval_date }}</div>
-                <div class="col-md-2">{{ el.note }}</div>
+
+<div class="container">
+        <div class="row g-3">
+            <div class="container">
+                <form class="form-inline"  method="get">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col"><a>Поиск колонкам</a></th>
+                        <th scope="col"><a>Начало периода</a></th>
+                        <th scope="col"><a>Конец периода</a></th>
+                        <th scope="col"><a>Автор</a></th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row"><span class="icon"><i class="fa fa-search"></i></span></th>
+                        <td><input name="q" type="text" class="form-control" placeholder= "Что ищем?"></td>
+                        <td>
+                            <input name="date_start" type="date" class="form-control" id=before>
+                            <script>
+                            date = new Date();
+                            dif = 1461;
+                            result = date.setDate(date.getDate() - dif);
+                            document.getElementById('before').value = new Date(result).toISOString().substring(0, 10);
+                            </script>
+                        </td>
+                        <td>
+                            <input name="date_end" type="date" class="form-control" id=now>
+                            <script>
+                            document.getElementById('now').value = new Date().toISOString().substring(0, 10);
+                            </script>
+                        </td>
+                        <td>
+                            <select name="person" type="text" class="form-control">
+                                <option></option>
+                                {% for auth in authors %}
+                                    <option>{{ auth }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn-sm btn btn-outline-success">Найти</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+                </form>
             </div>
-        {% endfor %}
-    {% else %}
-        <p>У нас нет записей!</p>
-    {% endif %}
+        </div>
+</div>
+
+<br>
+
+{% if documents %}
+<table class="table table-hover">
+  <thead>
+    <tr>
+        <th colspan = "2" scope = "colgroup"><a style="color: black">Документ</a>
+            <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=title">
+                &#9650;
+            </a>
+            <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-title">
+                &#9660;
+            </a>
+        </th>
+        <th scope="col"><div style="color: black"><a style="color: black">Автор</a>
+            <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=doc_author">
+                &#9650;
+            </a>
+            <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-doc_author">
+                &#9660;
+            </a>
+        </div>
+        </th>
+        <th scope="col"><a style="color: black">Дата утверждения</a>
+            <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=approval_date">
+                &#9650;
+            </a>
+            <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-approval_date">
+                &#9660;
+            </a>
+        </th>
+        <th colspan = "3" scope = "colgroup"><a style="color: black">Описание</a>
+            <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=note">
+                &#9650;
+            </a>
+            <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-note">
+                &#9660;
+            </a>
+        </th>
+    </tr>
+  </thead>
+    {% for el in documents %}
+    <tbody>
+    <tr>
+        <td scope="row" style="width:20px;">
+            {% if el.approval_date > err and el.approval_date < warn %} <a> &#128993; </a> {% endif %}
+            {% if el.approval_date < err %} <a> &#128315; </a> {% endif %}
+            {% if el.approval_date > warn %} <a> &#128994; </a> {% endif %}
+        </td>
+        <td scope="row" style="width:600px;">
+            <a target="_blank" href={{ el.doc_url }} style="color: black">
+                {{ el.title }}
+            </a>
+        </td>
+        <td style="color: black">
+            {{ el.doc_author }}
+        </td>
+        <td style="color: black">
+            {{ el.approval_date |date:"Y-m-d" }}
+        </td>
+        <td style="color: black">
+            {{ el.note }}
+        </td>
+        {% if user.is_authenticated %}
+        <td style="width:20px;">
+            <a href="change/{{el.id}}" style="color:green"><h5> &#128221; </h5></a>
+        </td>
+        <td style="width:20px;">
+            <a href="delete/{{el.id}}" style="color:red"><h5>&#10007;</h5></a>
+        </td>
+        {% endif %}
+    </tr>
+    </tbody>
+    {% endfor %}
+        <script>
+            date = new Date();
+            dif_err = 1095;
+            err = date.setDate(date.getDate() - dif_err);
+            warn = date.setDate(date.getDate() - dif_err + 30);
+            let colors = document.getElementById('colors');
+            colors.style.color = 'red';
+        </script>
+</table>
+{% else %}
+        <a class="container">
+            <div class="container">
+                <div class="row justify-content-center" style="color: black">
+                    <h5 style="color: gray">У нас нет записей, удовлетворяющих условиям поиска!</h5>
+                </div>
+            </div>
+        </a>
+{% endif %}
 {% endblock %}

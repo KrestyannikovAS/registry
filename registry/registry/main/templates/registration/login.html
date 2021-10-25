@@ -1,39 +1,66 @@
-{% extends 'main/base.html' %}
+<!doctype html>
 
-{% block content %}
-  <div class="alert alert-warning mt-4">
-  {% if form.errors %}
-      <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
+<html lang="ru" xmlns="http://www.w3.org/1999/html" xmlns="">
 
-  {% if next %}
-    {% if user.is_authenticated %}
-        <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
-    {% else %}
-        <p>Please login to see this page.</p>
-    {% endif %}
-  {% endif %}
+<head>
+  <!-- Кодировка веб-страницы -->
+    <meta charset="utf-8">
+  <!-- Настройка viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>...</title>
 
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-  <table>
+  <!-- Bootstrap CSS (Cloudflare CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA==" crossorigin="anonymous">
+  <!-- jQuery (Cloudflare CDN) -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <!-- Bootstrap Bundle JS (Cloudflare CDN) -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js" integrity="sha512-wV7Yj1alIZDqZFCUQJy85VN+qvEIly93fIQAN7iqDFCPEucLCeNFz4r35FCo9s6WrpdDQPi80xbljXB8Bjtvcg==" crossorigin="anonymous"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
 
-  <tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-  </tr>
-
-  <tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-  </tr>
-  </table>
-
-  <input type="submit" value="login" />
-  <input type="hidden" name="next" value="{{ next }}" />
-  </form>
-
-  {# Assumes you setup the password_reset view in your URLconf #}
-  <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-  </div>
-{% endblock %}
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 foo">
+            <div class="jumbotron">
+                <div class="container">
+                        <div class="row justify-content-center" style="color: grey">
+                            <h1>Авторизация</h1>
+                        </div>
+                </div>
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="row justify-content-center" style="color: grey">
+                            <table>
+                                <tr>
+                                    <td>{{ form.username.label_tag }}</td>
+                                    <td>{{ form.username }}</td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form.password.label_tag }}</td>
+                                    <td>{{ form.password }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row justify-content-center" style="color: grey">
+                            <input type="submit" value="Вход" />
+                            <input type="hidden" name="next" value="{{ next }}" />
+                        </div>
+                    </div>
+                </form>
+                {% if form.errors %}
+                <div class="container">
+                    <div class="row justify-content-center" style="color: grey">
+                        <h4>Не верные учетные данные</h4>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

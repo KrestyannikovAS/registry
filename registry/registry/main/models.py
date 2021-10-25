@@ -3,6 +3,7 @@ from datetime import date
 
 
 class Documents(models.Model):
+    DoesNotExist = None
     objects = None
     title = models.CharField('Название документа', max_length=250)
     doc_author = models.CharField('Автор', max_length=50)

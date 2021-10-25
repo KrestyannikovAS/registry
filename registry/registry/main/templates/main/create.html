@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Добавить документ</h1>
+<div xmlns="http://www.w3.org/1999/html">
+      <div class="row justify-content-center" style="color: grey">
+          <h3>Новый документ</h3>
+      </div>
+</div>
+<div class="container">
     <form method="post">
         {% csrf_token %}
         {{ form.title }}<br>
@@ -16,4 +21,5 @@
         <button type="submit" class="btn btn-success">Добавить</button>
         <span>{{ error }}</span>
     </form>
+</div>
 {% endblock %}

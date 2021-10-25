@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Изменить документа
+{% endblock %}
+
+{% block content %}
+<div xmlns="http://www.w3.org/1999/html">
+      <div class="row justify-content-center" style="color: grey">
+          <h3>Изменить документ</h3>
+      </div>
+</div>
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <input class="form-control" type="text" name="title" value="{{ document.title }}"/><br>
+        <input class="form-control" type="text" name="doc_author" value="{{ document.doc_author }}"/><br>
+        <input class="form-control" type="date" name="approval_date" value="{{ document.approval_date |date:"Y-m-d" }}"/><br>
+        <input class="form-control" type="text" name="doc_url" value="{{ document.doc_url }}"/><br>
+        <input class="form-control" type="text" name="note" value="{{ document.note }}"/><br>
+
+        <button type="submit" class="btn btn-success">Изменить</button>
+        <span>{{ error }}</span>
+    </form>
+</div>
+{% endblock %}

@@ -82,7 +82,7 @@ def change(request, id):
 
 
 # удаление данных из бд
-def delete(id):
+def delete(request, id):
     try:
         document = Documents.objects.get(id=id)
         document.delete()

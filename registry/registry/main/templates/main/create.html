@@ -15,7 +15,10 @@
         {% csrf_token %}
         {{ form.title }}<br>
         {{ form.doc_author }}<br>
+        {{ form.doc_author_department }}<br>
         {{ form.approval_date }}<br>
+        {{ form.revision_date }}<br>
+        {{ form.doc_source }}<br>
         {{ form.doc_url }}<br>
         {{ form.note }}<br>
         <button type="submit" class="btn btn-success">Добавить</button>

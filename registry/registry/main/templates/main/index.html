@@ -5,17 +5,17 @@
 {% endblock %}
 {% block content %}
 
-<div class="container">
-        <div class="row g-3">
-            <div class="container">
-                <form class="form-inline"  method="get">
+<div class="container" xmlns="http://www.w3.org/1999/html">
+    <div class="row g-3">
+        <div class="container">
+            <form class="form-inline"  method="get">
                 <table class="table">
                     <thead>
                     <tr>
                         <th scope="col"></th>
-                        <th scope="col"><a>Поиск колонкам</a></th>
-                        <th scope="col"><a>Начало периода</a></th>
-                        <th scope="col"><a>Конец периода</a></th>
+                        <th scope="col"><a>Поиск по тексту</a></th>
+                        <th scope="col"><a>Утвержден от</a></th>
+                        <th scope="col"><a>Утвержден до</a></th>
                         <th scope="col"><a>Автор</a></th>
                         <th scope="col"></th>
                     </tr>
@@ -28,7 +28,7 @@
                             <input name="date_start" type="date" class="form-control" id=before>
                             <script>
                             date = new Date();
-                            dif = 1461;
+                            dif = 3461;
                             result = date.setDate(date.getDate() - dif);
                             document.getElementById('before').value = new Date(result).toISOString().substring(0, 10);
                             </script>
@@ -67,8 +67,12 @@
             </div>
         </div>
 </div>
-
-<br>
+<tr>
+    <td><a class="text-dark" href="{% url 'home' %}">Зарегистрировано: {{ count_all }} </a></td>
+    <td><a class="text-success" href="?r=ok">Актуальных: {{ count_ok }}</a></td>
+    <td><a class="text-warning" href="?r=warn">Требуют внимания: {{ count_warn }} </a></td>
+    <td><a class="text-danger" href="?r=err">Просрочены: {{ count_err }} </a></td>
+</tr>
 
 {% if documents %}
 <table class="table table-hover table table-bordered">
@@ -108,7 +112,7 @@
                 &#9660;
             </a>
         </th>
-        <th scope="col"><a style="color: black">Дата пере.</a>
+        <th scope="col"><a style="color: black">Дата пересм.</a>
             <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=revision_date">
                 &#9650;
             </a>
@@ -138,8 +142,8 @@
     <tbody>
     <tr>
         <td scope="row" style="width:20px;">
-            {% if el.revision_date > err and el.revision_date < warn %} <a> &#9888; </a> {% endif %}
-            {% if el.revision_date < err %} <a> &#128315; </a> {% endif %}
+            {% if el.revision_date > now and el.revision_date <= warn %} <a> &#9888; </a> {% endif %}
+            {% if el.revision_date <= now %} <a> &#128315; </a> {% endif %}
             {% if el.revision_date > warn %} <a style="color:green"> &#10004; </a> {% endif %}
         </td>
         <td scope="row" style="width:600px;">
@@ -170,7 +174,7 @@
             <a href="change/{{el.id}}" style="color:green"><h5> &#128221; </h5></a>
         </td>
         <td style="width:20px;">
-            <a href="delete/{{el.id}}" style="color:red"><h5>&#10007;</h5></a>
+            <a href="delete_conf/{{el.id}}" style="color:red"><h5>&#10007;</h5></a>
         </td>
         {% endif %}
     </tr>

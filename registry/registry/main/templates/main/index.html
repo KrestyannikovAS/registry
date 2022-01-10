@@ -5,14 +5,19 @@
 {% endblock %}
 {% block content %}
 
-<div class="container" xmlns="http://www.w3.org/1999/html">
-    <div class="row g-3">
+<table class="table">
+    <td width="250">
+        <div> <a class="text-dark" href="{% url 'home' %}">Зарегистрированные: {{ count_all }}</a></div>
+        <div> <a class="text-success" href="?r=ok">Актуальные: {{ count_ok }}</a></div>
+        <div> <a class="text-warning" href="?r=warn">Требуют внимания: {{ count_warn }}</a></div>
+        <div> <a class="text-danger" href="?r=err">Требуют пересмотра: {{ count_err }}</a></div>
+    </td>
+    <td>
         <div class="container">
             <form class="form-inline"  method="get">
                 <table class="table">
                     <thead>
                     <tr>
-                        <th scope="col"></th>
                         <th scope="col"><a>Поиск по тексту</a></th>
                         <th scope="col"><a>Утвержден от</a></th>
                         <th scope="col"><a>Утвержден до</a></th>
@@ -22,59 +27,46 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <th scope="row"><span class="icon"><i class="fa fa-search"></i></span></th>
-                        <td><input name="q" type="text" class="form-control" placeholder= "Что ищем?"></td>
+                        <td>
+                            <input name="q" type="text" class="form-control"  placeholder= "&#xF002; Поиск на странице" style="font-family:Arial, FontAwesome">
+                        </td>
                         <td>
                             <input name="date_start" type="date" class="form-control" id=before>
                             <script>
-                            date = new Date();
-                            dif = 3461;
-                            result = date.setDate(date.getDate() - dif);
-                            document.getElementById('before').value = new Date(result).toISOString().substring(0, 10);
+                                date = new Date();
+                                dif = 3461;
+                                result = date.setDate(date.getDate() - dif);
+                                document.getElementById('before').value = new Date(result).toISOString().substring(0, 10);
                             </script>
                         </td>
                         <td>
                             <input name="date_end" type="date" class="form-control" id=now>
                             <script>
-                            document.getElementById('now').value = new Date().toISOString().substring(0, 10);
+                                document.getElementById('now').value = new Date().toISOString().substring(0, 10);
                             </script>
                         </td>
                         <td>
                             <select name="person" type="text" class="form-control">
                                 <option></option>
                                 {% for auth in authors %}
-                                    <option>{{ auth }}</option>
+                                <option>{{ auth }}</option>
                                 {% endfor %}
                             </select>
                         </td>
                         <td>
-                            <a><button type="submit" class="btn-sm btn btn-outline-success">Найти</button></a>
-                            <a href="{% url 'home' %}" class="btn-sm btn btn-outline-success">Сброс</a>
+                            <a><button type="submit" class="btn btn btn-outline-success">Найти</button></a>
+                            <a href="{% url 'home' %}" class="btn btn btn-outline-success">Сброс</a>
                         </td>
-
-                    </tr>
-                    <tr>
-                        <th scope="row"></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                     </tr>
                     </tbody>
                 </table>
-                </form>
-            </div>
+            </form>
         </div>
-</div>
-<tr>
-    <td><a class="text-dark" href="{% url 'home' %}">Зарегистрировано: {{ count_all }} </a></td>
-    <td><a class="text-success" href="?r=ok">Актуальных: {{ count_ok }}</a></td>
-    <td><a class="text-warning" href="?r=warn">Требуют внимания: {{ count_warn }} </a></td>
-    <td><a class="text-danger" href="?r=err">Просрочены: {{ count_err }} </a></td>
-</tr>
+    </td>
+</table>
 
 {% if documents %}
+
 <table class="table table-hover table table-bordered">
   <thead style="position: sticky;top: 0" class="thead-light">
     <tr>
@@ -138,7 +130,9 @@
         </th>
     </tr>
   </thead>
+
     {% for el in documents %}
+
     <tbody>
     <tr>
         <td scope="row" style="width:20px;">
@@ -179,6 +173,7 @@
         {% endif %}
     </tr>
     </tbody>
+
     {% endfor %}
         <script>
             date = new Date();
@@ -189,7 +184,9 @@
             colors.style.color = 'red';
         </script>
 </table>
+
 {% else %}
+
         <a class="container">
             <div class="container">
                 <div class="row justify-content-center" style="color: black">
@@ -197,5 +194,6 @@
                 </div>
             </div>
         </a>
+
 {% endif %}
 {% endblock %}

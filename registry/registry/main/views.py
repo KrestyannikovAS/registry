@@ -14,7 +14,9 @@ def index(request):
     query = request.GET.get('q')
     revision = request.GET.get('r')
     person = request.GET.get('person')
+    department = request.GET.get('department')
     authors = Documents.objects.values_list('doc_author', flat=True).distinct('doc_author')
+    departments = Documents.objects.values_list('doc_author_department', flat=True).distinct('doc_author_department')
     count_all = Documents.objects.values_list('id').count()
     count_ok = Documents.objects.filter(revision_date__gt=warn_time).count()
     count_warn = Documents.objects.filter(revision_date__lte=warn_time, revision_date__gt=now).count()
@@ -23,6 +25,8 @@ def index(request):
         query = ''
     if person is None:
         person = ''
+    if department is None:
+        department = ''
     date_start = request.GET.get('date_start')
     if date_start is None:
         date_start = now - datetime.timedelta(days=3650)
@@ -36,12 +40,13 @@ def index(request):
                                                  Q(approval_date__icontains=query) |
                                                  Q(note__icontains=query)).filter(Q(approval_date__gte=date_start) &
                                                                                   Q(approval_date__lte=date_end) &
-                                                                                  Q(doc_author__icontains=person)).\
+                                                                                  Q(doc_author__icontains=person) &
+                                                                                  Q(doc_author_department__icontains=department)).\
                 order_by(order_by)
             return render(request, 'main/index.html', {'documents': documents, 'warn': warn_time,
                                                        'authors': authors, 'now': now, 'count_all': count_all,
                                                        'count_ok': count_ok, 'count_warn': count_warn,
-                                                       'count_err': count_err})
+                                                       'count_err': count_err, 'departments': departments})
         else:
             error = 'Даты утверждения в форме поиска указан не верно!'
             return render(request, 'main/index.html', {'error': error})
@@ -50,19 +55,19 @@ def index(request):
         return render(request, 'main/index.html', {'documents': documents, 'warn': warn_time,
                                                    'authors': authors, 'now': now, 'count_all': count_all,
                                                    'count_ok': count_ok, 'count_warn': count_warn,
-                                                   'count_err': count_err})
+                                                   'count_err': count_err, 'departments': departments})
     elif revision == 'warn':
         documents = Documents.objects.filter(Q(revision_date__lte=warn_time) & Q(revision_date__gt=now))
         return render(request, 'main/index.html', {'documents': documents, 'warn': warn_time,
                                                    'authors': authors, 'now': now, 'count_all': count_all,
                                                    'count_ok': count_ok, 'count_warn': count_warn,
-                                                   'count_err': count_err})
+                                                   'count_err': count_err, 'departments': departments})
     elif revision == 'err':
         documents = Documents.objects.filter(Q(revision_date__lte=now))
         return render(request, 'main/index.html', {'documents': documents, 'warn': warn_time,
                                                    'authors': authors, 'now': now, 'count_all': count_all,
                                                    'count_ok': count_ok, 'count_warn': count_warn,
-                                                   'count_err': count_err})
+                                                   'count_err': count_err, 'departments': departments})
 
 
 def delete_conf(request, id):
@@ -71,6 +76,8 @@ def delete_conf(request, id):
 
 
 def create(request):
+    authors = Documents.objects.values_list('doc_author', flat=True).distinct('doc_author')
+    departments = Documents.objects.values_list('doc_author_department', flat=True).distinct('doc_author_department')
     error = ''
     if request.method == 'POST':
         form = DocumentForm(request.POST)
@@ -91,6 +98,9 @@ def create(request):
 # изменение данных в бд
 def change(request, id):
     try:
+        authors = Documents.objects.values_list('doc_author', flat=True).distinct('doc_author')
+        departments = Documents.objects.values_list('doc_author_department', flat=True).distinct(
+            'doc_author_department')
         document = Documents.objects.get(id=id)
 
         if request.method == "POST":
@@ -105,7 +115,8 @@ def change(request, id):
             document.save()
             return HttpResponseRedirect("/")
         else:
-            return render(request, "main/change.html", {"document": document})
+            return render(request, "main/change.html", {"document": document, 'authors': authors,
+                                                        'departments': departments})
     except Documents.DoesNotExist:
         return HttpResponseNotFound("<h2>Документ для изменения не найден</h2>")
 

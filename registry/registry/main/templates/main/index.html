@@ -6,29 +6,29 @@
 {% block content %}
 
 <table class="table">
-    <td width="250">
-        <div> <a class="text-dark" href="{% url 'home' %}">Зарегистрированные: {{ count_all }}</a></div>
-        <div> <a class="text-success" href="?r=ok">Актуальные: {{ count_ok }}</a></div>
-        <div> <a class="text-warning" href="?r=warn">Требуют внимания: {{ count_warn }}</a></div>
-        <div> <a class="text-danger" href="?r=err">Требуют пересмотра: {{ count_err }}</a></div>
-    </td>
-    <td>
+    <div>
+        <td align="center"><a class="text-dark" href="{% url 'home' %}">Зарегистрированные: {{ count_all }}</a></td>
+        <td align="center"><a class="text-success" href="?r=ok">Актуальные: {{ count_ok }}</a></td>
+        <td align="center"><a class="text-warning" href="?r=warn">Требуют внимания: {{ count_warn }}</a></td>
+        <td align="center"><a class="text-danger" href="?r=err">Требуют пересмотра: {{ count_err }}</a></td>
+    </div>
         <div class="container">
             <form class="form-inline"  method="get">
                 <table class="table">
-                    <thead>
+                    <thead align="center">
                     <tr>
                         <th scope="col"><a>Поиск по тексту</a></th>
                         <th scope="col"><a>Утвержден от</a></th>
                         <th scope="col"><a>Утвержден до</a></th>
                         <th scope="col"><a>Автор</a></th>
-                        <th scope="col"></th>
+                        <th scope="col"><a>Отдел</a></th>
+                        <th scope="col"w></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr align="center">
                         <td>
-                            <input name="q" type="text" class="form-control"  placeholder= "&#xF002; Поиск на странице" style="font-family:Arial, FontAwesome">
+                            <input name="q" type="text" class="form-control"  placeholder= "Поиск на странице" style="font-family:Arial, FontAwesome">
                         </td>
                         <td>
                             <input name="date_start" type="date" class="form-control" id=before>
@@ -54,6 +54,14 @@
                             </select>
                         </td>
                         <td>
+                            <select name="department" type="text" class="form-control">
+                                <option></option>
+                                {% for dep in departments %}
+                                <option>{{ dep }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
                             <a><button type="submit" class="btn btn btn-outline-success">Найти</button></a>
                             <a href="{% url 'home' %}" class="btn btn btn-outline-success">Сброс</a>
                         </td>
@@ -62,73 +70,81 @@
                 </table>
             </form>
         </div>
-    </td>
 </table>
 
 {% if documents %}
-
 <table class="table table-hover table table-bordered">
-  <thead style="position: sticky;top: 0" class="thead-light">
-    <tr>
+  <thead style="position: sticky;top: 0" class="thead-light" align="center">
         <th colspan = "2" scope = "colgroup"><a style="color: black">Документ</a>
+            <div>
             <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=title">
                 &#9650;
             </a>
             <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-title">
                 &#9660;
             </a>
+            </div>
         </th>
-        <th scope="col"><div style="color: black"><a style="color: black">Автор</a>
+        <th scope="col" style="width:170px;"><a  style="color: black">Автор</a>
+            <div>
             <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=doc_author">
                 &#9650;
             </a>
             <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-doc_author">
                 &#9660;
             </a>
-        </div>
+            </div>
         </th>
-        <th scope="col"><div style="color: black"><a style="color: black">Отдел</a>
+        <th scope="col" style="width:100px;"><a style="color: black">Отдел</a>
+            <div>
             <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=doc_author_department">
                 &#9650;
             </a>
             <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-doc_author_department">
                 &#9660;
             </a>
-        </div>
+            </div>
         </th>
-        <th scope="col"><a style="color: black">Дата утв.</a>
+        <th scope="col" style="width:120px;"><a style="color: black">Дата утв.</a>
+            <div>
             <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=approval_date">
                 &#9650;
             </a>
             <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-approval_date">
                 &#9660;
             </a>
+            </div>
         </th>
-        <th scope="col"><a style="color: black">Дата пересм.</a>
+        <th scope="col" style="width:120px;"><a style="color: black">Дата пер.</a>
+            <div>
             <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=revision_date">
                 &#9650;
             </a>
             <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-revision_date">
                 &#9660;
             </a>
+            </div>
         </th>
-        <th scope="col"><a style="color: black">Источник</a>
+        <th scope="col" style="width:170px;"><a style="color: black">Источник</a>
+            <div>
             <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=doc_source">
                 &#9650;
             </a>
             <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-doc_source">
                 &#9660;
             </a>
+            </div>
         </th>
         <th colspan = "3" scope = "colgroup"><a style="color: black">Комментарий</a>
+            <div>
             <a style="color: black" class="btn-sm btn-sm btn-online-secondary" href="?order_by=note">
                 &#9650;
             </a>
             <a style="color: black" class="btn-sm btn-online-secondary" href="?order_by=-note">
                 &#9660;
             </a>
+            </div>
         </th>
-    </tr>
   </thead>
 
     {% for el in documents %}

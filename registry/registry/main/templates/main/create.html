@@ -13,14 +13,14 @@
 <div class="container">
     <form method="post">
         {% csrf_token %}
-        {{ form.title }}<br>
-        {{ form.doc_author }}<br>
-        {{ form.doc_author_department }}<br>
-        {{ form.approval_date }}<br>
-        {{ form.revision_date }}<br>
-        {{ form.doc_source }}<br>
-        {{ form.doc_url }}<br>
-        {{ form.note }}<br>
+        Название документа{{ form.title }}<br>
+        Автор{{ form.doc_author }}<br>
+        Отдел{{ form.doc_author_department }}<br>
+        Дата утверждения{{ form.approval_date }}<br>
+        Дата пересмотра{{ form.revision_date }}<br>
+        Источник{{ form.doc_source }}<br>
+        Ссылка на документ{{ form.doc_url }}<br>
+        Комментарий{{ form.note }}<br>
         <button type="submit" class="btn btn-success">Добавить</button>
         <a href="{% url 'home' %}" class="btn btn-outline-success">На главную страницу</a>
         <span>{{ error }}</span>

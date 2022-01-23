@@ -9,10 +9,10 @@ class Documents(models.Model):
     doc_author = models.CharField('Автор', max_length=50)
     doc_author_department = models.CharField('Отдел', max_length=50, default="СПАК")
     approval_date = models.DateField('Дата утверждения', default=date.today)
-    revision_date = models.DateField('Дата утверждения', default=date.today)
+    revision_date = models.DateField('Дата пересмотра', default=date.today)
     doc_source = models.CharField('Источник', max_length=250, default="АСДОУ")
     doc_url = models.CharField('Ссылка на документ', max_length=250)
-    note = models.CharField('Комментарий', max_length=250, default="НЕТ")
+    note = models.CharField('Комментарий, номенкл. номер', max_length=250, default="НЕТ")
 
     def __str__(self):
         return self.title

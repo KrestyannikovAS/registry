@@ -13,15 +13,55 @@
 <div class="container">
     <form method="post">
         {% csrf_token %}
-        <input class="form-control" type="text" name="title" value="{{ document.title }}"/><br>
-        <input class="form-control" type="text" name="doc_author" value="{{ document.doc_author }}"/><br>
-        <input class="form-control" type="text" name="doc_author_department" value="{{ document.doc_author_department }}"/><br>
-        <input class="form-control" type="date" name="approval_date" value="{{ document.approval_date | date:'Y-m-d' }}"/><br>
-        <input class="form-control" type="date" name="revision_date" value="{{ document.revision_date | date:'Y-m-d' }}"/><br>
-        <input class="form-control" type="text" name="doc_source" value="{{ document.doc_source }}"/><br>
-        <input class="form-control" type="text" name="doc_url" value="{{ document.doc_url }}"/><br>
-        <input class="form-control" type="text" name="note" value="{{ document.note }}"/><br>
-
+        <table class="table">
+            <tr>
+                <td width="20%"><a class="row justify-content-center" style="color: grey">Документ</a></td>
+                <td width="80%"><input class="form-control" type="text" name="title" value="{{ document.title }}"/></td>
+            </tr>
+            <tr>
+                <td width="20%"><a class="row justify-content-center" style="color: grey">Автор</a></td>
+                <td width="80%">
+                    <select name="person" type="text" class="form-control">
+                        <option value="" selected disabled hidden>{{ document.doc_author }}</option>
+                        {% for auth in authors %}
+                        <option>{{ auth }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%"><a class="row justify-content-center" style="color: grey">Отдел</a></td>
+                <td width="80%">
+                    <select name="department" type="text" class="form-control">
+                        <option value="" selected disabled hidden>{{ document.doc_author_department }}</option>
+                        {% for dep in departments %}
+                        <option>{{ dep }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%"><a class="row justify-content-center" style="color: grey">Дата утверждения</a></td>
+                <td width="80%"><input class="form-control" type="date" name="approval_date" value="{{ document.approval_date | date:'Y-m-d' }}"/></td>
+            </tr>
+            <tr>
+                <td width="20%"><a class="row justify-content-center" style="color: grey">Дата пересмотра</a></td>
+                <td width="80%"><input class="form-control" type="date" name="revision_date" value="{{ document.revision_date | date:'Y-m-d' }}"/></td>
+            </tr>
+            <tr>
+                <td width="20%"><a class="row justify-content-center" style="color: grey">Источник</a></td>
+                <td width="80%"><input class="form-control" type="text" name="doc_source" value="{{ document.doc_source }}"/></td>
+            </tr>
+            <tr>
+                <td width="20%"><a class="row justify-content-center" style="color: grey">Ссылка на документ</a></td>
+                <td width="80%"><input class="form-control" type="text" name="doc_url" value="{{ document.doc_url }}"/></td>
+            </tr>
+            <tr>
+                <td width="20%"><a class="row justify-content-center" style="color: grey">Комментарий</a></td>
+                <td width="80%"><input class="form-control" type="text" name="note" value="{{ document.note }}"/></td>
+            </tr>
+        </table>
+        <br>
         <button type="submit" class="btn btn-success">Изменить</button>
         <a href="{% url 'home' %}" class="btn btn-outline-success">На главную страницу</a>
         <span>{{ error }}</span>
